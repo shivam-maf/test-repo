@@ -1,0 +1,24 @@
+name: Build and Push Image to ECR
+
+on:
+  push:
+    branches:
+    - 'main'
+    - 'develop'
+    - 'release-**.**'
+    paths-ignore:
+      - "charts/**"
+
+jobs:
+  build:
+    name: Build Image
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Generate build ID
+        id: prep
+        run: |
+          sha=${GITHUB_SHA::7}
+          ts=$(date +'%d-%m-%Y')
+          echo "::set-output name=BUILD_ID::${sha}-${ts}"
+
